@@ -30,20 +30,12 @@ exports.createTour = (req, res) => {
 exports.getTour = (req, res) => {
     const id = Number(req.params.id)
     const tour = tours.find(tour => tour.id == id)
-    if (tour) {
         res.status(200).json({
             status: "success",
             data: {
                 tour
             }
         })
-        return
-    }
-    res.status(404).json({
-        status: "fail",
-        message: "tour does not exist"
-    })
-
 }
 
 
