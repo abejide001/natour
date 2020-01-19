@@ -4,7 +4,7 @@ const dotenv = require("dotenv")
 dotenv.config()
 const { DB_USERNAME, DB_PASSWORD, DB_HOST, DB_NAME } = process.env
 const connectDB = () => {
-    mongoose.connect(`mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}?retryWrites=true&w=majority`, {
+    mongoose.connect(`mongodb://127.0.0.1:27017/natour`, {
         useCreateIndex: true,
         useNewUrlParser: true,
         useFindAndModify: true,
