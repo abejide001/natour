@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 const dotenv = require("dotenv")
-
+const Tour = require("../models/Tour")
+const data = require("../dev-data/data/tours-simple.json")
 dotenv.config()
 const { DB_USERNAME, DB_PASSWORD, DB_HOST, DB_NAME } = process.env
 const connectDB = () => {
@@ -13,5 +14,6 @@ const connectDB = () => {
         .then(() => console.log(`connected successfully`))
         .catch((err) => console.log(err))
 }
+
 
 module.exports = connectDB

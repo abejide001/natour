@@ -9,7 +9,7 @@ tourRouter.post("/", createTour)
 
 tourRouter.get("/:id", checkId, getTour)
 
-tourRouter.patch("/:id", updateTour)
+tourRouter.patch("/:id", checkId, updateTour)
 
 tourRouter.delete("/:id", deleteTour)
 
