@@ -9,7 +9,7 @@ const seedData = async () => {
         await Promise.all([Tour.insertMany(tourData), User.insertMany(userData)])
         console.log("data seeded")
     } catch(err) {
-        console.log(err)
+        console.log(err.message)
     }
 }
 seedData()
