@@ -1,5 +1,6 @@
 const Tour = require("../models/Tour")
 const { features } = require("../api-features/features")
+
 exports.getAlltours = async (req, res) => {
     try {
         let tours = await features(req)
@@ -56,7 +57,6 @@ exports.getTour = async (req, res) => {
     }
 }
 
-
 exports.updateTour = async (req, res) => {
     try {
         const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
@@ -88,5 +88,13 @@ exports.deleteTour = async (req, res) => {
             status: "fail",
             message: err
         })
+    }
+}
+
+exports.getTourStats = async (req, res) => {
+    try {
+
+    } catch (err) {
+
     }
 }

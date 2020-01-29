@@ -1,6 +1,6 @@
 const Tour = require("../models/Tour")
 
-exports.features = async(req) => {
+exports.features = async (req) => {
     const queryObj = { ...req.query }
 
     // exclude fields 
