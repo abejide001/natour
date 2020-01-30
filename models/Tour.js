@@ -10,7 +10,7 @@ const tourSchema = new mongoose.Schema({
         type: Number
     },
     duration: {
-        type: Number,
+        type: String,
         required: true
     },
     maxGroupSize: {
@@ -58,6 +58,13 @@ const tourSchema = new mongoose.Schema({
     startDates: {
         type: [Date]
     }
+}, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+})
+
+tourSchema.virtual("durationWeeks").get(function() { // get virtual property! 
+    return Math.ceil(this.duration / 7)
 })
 
 const Tour = mongoose.model('Tour', tourSchema)
