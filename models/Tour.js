@@ -6,7 +6,9 @@ const tourSchema = new mongoose.Schema({
         type: String,
         unique: true,
         index: true,
-        required: true
+        required: [true, 'A tour must have a name'],
+        maxlength: [40, 'A tour name must have less than equal 40 characters'],
+        minlength: [10, 'A tour name must have more than equal 10 characters']
     },
     slug: {
         type: String
@@ -24,11 +26,17 @@ const tourSchema = new mongoose.Schema({
     },
     difficulty: {
         type: String,
-        required: true
+        required: true,
+        enum: {
+            values: ["easy", "medium", "difficult"],
+            message: "Dificulty is either: easy, medium, difficult"
+        } 
     },
     ratingsAverage: {
         type: Number,
-        default: 4.5
+        default: 4.5,
+        min: [1, "Rating must be above 1.0"],
+        max: [5, "Rating must be below 5.0"]
     },
     ratingsQuantity: {
         type: Number,
@@ -39,7 +47,13 @@ const tourSchema = new mongoose.Schema({
         required: true
     },
     priceDiscount: {
-        type: Number
+        type: Number,
+        validate: {
+            validator: function (val) {
+                return val < this.price
+            },
+            message: "Price should be greater than Price discount"
+        }
     },
     summary: {
        type: String,
@@ -88,7 +102,15 @@ tourSchema.pre('save', function(next) {
     next()
 })
 
-// 
+// aggregate middleware
+tourSchema.pre("aggregate", function(next) {
+    this.pipeline().unshift({
+        $match: {
+            secretTour: { $ne: true }
+        }
+    })
+    next()
+})
 const Tour = mongoose.model('Tour', tourSchema)
 
 module.exports = Tour
