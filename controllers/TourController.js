@@ -1,20 +1,15 @@
 const Tour = require("../models/Tour")
-const { features } = require("../api-features/features")
+const { features } = require("../utils/features")
+const { sendFailureResponse, sendSuccessResponse } = require("../utils/appResponse")
 
 exports.getAlltours = async (req, res) => {
     try {
         let tours = await features(req)
-        res.status(200).json({
-            status: "success",
-            data: {
-                tours
-            }
+        sendSuccessResponse(res, 200, {
+            data: tours
         })
     } catch (err) {
-        res.status(400).json({
-            status: "fail",
-            message: err.message
-        })
+        sendFailureResponse(res, 400, err.message)
     }
 }
 
@@ -26,34 +21,22 @@ exports.createTour = async (req, res) => {
             price,
             rating
         })
-        res.status(201).json({
-            status: "success",
-            data: {
-                newTour
-            }
+        sendSuccessResponse(res, 201, {
+            data: newTour
         })
     } catch (err) {
-        res.status(400).json({
-            status: "fail",
-            message: err.message
-        })
+        sendFailureResponse(res, 400, err.message)
     }
 }
 
 exports.getTour = async (req, res) => {
     try {
         const tour = await Tour.findById(req.params.id)
-        res.status(200).json({
-            status: "success",
-            data: {
-                tour
-            }
+        sendSuccessResponse(res, 200, {
+            data: tour
         })
     } catch (err) {
-        res.status(404).json({
-            status: "fail",
-            message: err.message
-        })
+        sendFailureResponse(res, 400, err.message)
     }
 }
 
@@ -62,32 +45,20 @@ exports.updateTour = async (req, res) => {
         const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
             new: true
         })
-        res.status(200).json({
-            status: "success",
-            data: {
-                tour
-            }
+        sendSuccessResponse(res, 200, {
+            data: tour
         })
     } catch (err) {
-        res.status(400).json({
-            status: "fail",
-            message: err.message
-        })
+        sendFailureResponse(res, 400, err.message)
     }
 }
 
 exports.deleteTour = async (req, res) => {
     try {
         await Tour.findByIdAndDelete(req.params.id)
-        res.status(200).json({
-            status: "success",
-            message: "Deleted successfully"
-        })
+        sendSuccessResponse(res, 200, "Deleted successfully")
     } catch (err) {
-        res.status(400).json({
-            status: "fail",
-            message: err.message
-        })
+        sendFailureResponse(res, 400, err.message)
     }
 }
 
@@ -117,17 +88,11 @@ exports.getTourStats = async (req, res) => {
             //     $match: { _id: { $ne: "easy" } }
             // }
         ])
-        res.status(200).json({
-            status: "success",
-            data: {
-                message: stats
-            }
+        sendFailureResponse(res, 200, {
+            data: { message: stats }
         })
     } catch (err) {
-        res.status(400).json({
-            status: "fail",
-            message: err.message
-        })
+        sendFailureResponse(res, 400, err.message)
     }
 }
 
@@ -167,16 +132,10 @@ exports.getMonthly = async (req, res) => {
                 $limit: 12
             }
         ])
-        res.status(200).json({
-            status: "success",
-            data: {
-                message: plan
-            }
+        sendFailureResponse(res, 200, {
+            data: { message: plan }
         })
     } catch (error) {
-        res.status(400).json({
-            status: "fail",
-            message: err.message
-        })
+        sendFailureResponse(res, 400, err.message)
     }
 }
