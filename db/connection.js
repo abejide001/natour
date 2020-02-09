@@ -12,7 +12,7 @@ const connectDB = () => {
         useUnifiedTopology: true
     })
         .then(() => console.log(`database connected successfully`))
-        .catch((err) => console.log(err))
+        .catch((err) => console.log(err.message))
 }
 
 

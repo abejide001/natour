@@ -10,6 +10,7 @@ const seedData = async () => {
         console.log("data seeded")
     } catch(err) {
         console.log(err.message)
+        process.exit(1)
     }
 }
 seedData()
