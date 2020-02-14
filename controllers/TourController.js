@@ -5,9 +5,8 @@ const { sendFailureResponse, sendSuccessResponse } = require("../utils/appRespon
 exports.getAlltours = async (req, res) => {
     try {
         let tours = await features(req)
-        sendSuccessResponse(res, 200, {
-            data: tours
-        })
+        sendSuccessResponse(res, 200, tours)
+        console.log(req.user)
     } catch (err) {
         sendFailureResponse(res, 400, err.message)
     }
@@ -21,9 +20,7 @@ exports.createTour = async (req, res) => {
             price,
             rating
         })
-        sendSuccessResponse(res, 201, {
-            data: newTour
-        })
+        sendSuccessResponse(res, 201, newTour)
     } catch (err) {
         sendFailureResponse(res, 400, err.message)
     }
@@ -32,9 +29,7 @@ exports.createTour = async (req, res) => {
 exports.getTour = async (req, res) => {
     try {
         const tour = await Tour.findById(req.params.id)
-        sendSuccessResponse(res, 200, {
-            data: tour
-        })
+        sendSuccessResponse(res, 200, tour)
     } catch (err) {
         sendFailureResponse(res, 400, err.message)
     }
@@ -45,9 +40,7 @@ exports.updateTour = async (req, res) => {
         const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
             new: true
         })
-        sendSuccessResponse(res, 200, {
-            data: tour
-        })
+        sendSuccessResponse(res, 200, tour)
     } catch (err) {
         sendFailureResponse(res, 400, err.message)
     }
@@ -56,7 +49,7 @@ exports.updateTour = async (req, res) => {
 exports.deleteTour = async (req, res) => {
     try {
         await Tour.findByIdAndDelete(req.params.id)
-        sendSuccessResponse(res, 200, "Deleted successfully")
+        sendSuccessResponse(res, 204, "Deleted successfully")
     } catch (err) {
         sendFailureResponse(res, 400, err.message)
     }
@@ -88,9 +81,7 @@ exports.getTourStats = async (req, res) => {
             //     $match: { _id: { $ne: "easy" } }
             // }
         ])
-        sendFailureResponse(res, 200, {
-            data: { message: stats }
-        })
+        sendSuccessResponse(res, 200, stats)
     } catch (err) {
         sendFailureResponse(res, 400, err.message)
     }
@@ -129,12 +120,10 @@ exports.getMonthly = async (req, res) => {
                 $sort: { numTourStats: -1 } // sort in desc order
             },
             {
-                $limit: 12
+                $limit: 12 // limit the field
             }
         ])
-        sendFailureResponse(res, 200, {
-            data: { message: plan }
-        })
+        sendSuccessResponse(res, 200, plan)
     } catch (error) {
         sendFailureResponse(res, 400, err.message)
     }

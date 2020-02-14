@@ -2,9 +2,11 @@ const express = require("express")
 const tourRouter = express.Router()
 const { checkId } = require("../middlewares/checkId")
 const { getTopTours } = require("../middlewares/aliasTopTours")
+const { protectRoute } = require("../middlewares/protectRoute")
+const { restrictRoute } = require("../middlewares/restrictRoute")
 const { getAlltours, createTour, getTour, updateTour, deleteTour, getTourStats, getMonthly } = require("../controllers/TourController")
 
-tourRouter.get("/", getAlltours)
+tourRouter.get("/", protectRoute, getAlltours)
 
 tourRouter.get("/top", getTopTours, getAlltours)
 
@@ -16,8 +18,8 @@ tourRouter.post("/", createTour)
 
 tourRouter.get("/:id", checkId, getTour)
 
-tourRouter.patch("/:id", checkId, updateTour)
+tourRouter.patch("/:id", protectRoute, restrictRoute, checkId, updateTour)
 
-tourRouter.delete("/:id", deleteTour)
+tourRouter.delete("/:id", protectRoute, restrictRoute, checkId, deleteTour)
 
 module.exports = tourRouter
