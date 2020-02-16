@@ -6,13 +6,15 @@ dotenv.config()
 const sendEmail = async options => {
     const { EMAIL_USERNAME, EMAIL_HOST, EMAIL_PASSWORD, EMAIL_PORT } = process.env
     const transporter = nodemailer.createTransport({
+        secureConnection: false,
         host: EMAIL_HOST,
         port: EMAIL_PORT,
         auth: {
             user: EMAIL_USERNAME,
             pass: EMAIL_PASSWORD
-        }
+        },
     })
+
     const mailOptions = {
         from: "Papa <kaka@gmail.com>",
         to: options.email,

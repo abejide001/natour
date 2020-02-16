@@ -6,7 +6,6 @@ exports.getAlltours = async (req, res) => {
     try {
         let tours = await features(req)
         sendSuccessResponse(res, 200, tours)
-        console.log(req.user)
     } catch (err) {
         sendFailureResponse(res, 400, err.message)
     }

@@ -21,6 +21,15 @@ exports.checkEmail = async (req, res, next) => {
     next()
 }
 
+exports.checkEmailForForgotPassword = async (req, res, next) => {
+    const { email } = req.body
+    const user = await User.findOne({ email })
+
+    if (!user) return sendFailureResponse(res, 404, "User does not exist")
+
+    next()
+}
+
 exports.verifyPassword = async (req, res, next) => {
     const { email, password } = req.body
     const user = await User.findOne({ email })
