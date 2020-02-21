@@ -67,6 +67,11 @@ const tourSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    archive: {
+        type: Boolean,
+        default: false,
+        select: false
+    },
     images: {
         type: [String]
     },

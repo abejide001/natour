@@ -24,6 +24,7 @@ const userSchema = new mongoose.Schema({
         required: true,
         minlength: 8
     },
+    newPassword: String,
     passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: String,
@@ -36,10 +37,19 @@ const userSchema = new mongoose.Schema({
         type: String
     },
     active: {
-        type: Boolean
+        type: Boolean,
+        default: true,
+        select: false
     }
 })
 
+// get active users
+userSchema.pre(/^find/, function(next) {
+    this.find({ active: {
+        $ne: false
+    }})
+    next()
+})
 // hash password
 userSchema.pre("save", async function(next) {
     // check if the password is not modified
@@ -73,9 +83,9 @@ userSchema.methods.changedPasswordAfter = function(JWTTimestamp) {
 }
 
 userSchema.methods.createPasswordResetToken = function () {
-    const resetToken = crypto.randomBytes(32).toString("hex") // not encrypted
+    const resetToken = crypto.randomBytes(32).toString("hex") // not encrypted(sending to user)
 
-    this.passwordResetToken = crypto.createHash("sha256").update(resetToken).digest("hex") // reset token to user(encrypted)
+    this.passwordResetToken = crypto.createHash("sha256").update(resetToken).digest("hex") // reset token to user(encrypted, saving in db)
 
     this.passwordResetExpires = Date.now() + 10 * 60 * 1000 // password expire time
 

@@ -17,7 +17,6 @@ exports.checkEmail = async (req, res, next) => {
     const user = await User.findOne({ email })
 
     if (!user) return sendFailureResponse(res, 400, "Bad Credentials")
-
     next()
 }
 
@@ -37,5 +36,19 @@ exports.verifyPassword = async (req, res, next) => {
     const pass = bcrypt.compareSync(password, user.password)
     if (!pass) return sendFailureResponse(res, 400, "Bad Credentials")
 
+    next()
+}
+
+exports.confirmPasswordForUpdate = async(req, res, next) => {
+    const { password, newPassword, passwordConfirm } = req.body
+    const user = await User.findById(req.user.id).select("+password")
+
+    const pass = bcrypt.compareSync(password, user.password)
+    if (!pass) return sendFailureResponse(res, 400, "Password is Invalid")
+
+    user.password = newPassword
+    user.passwordConfirm = passwordConfirm
+
+    await user.save()
     next()
 }

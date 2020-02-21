@@ -127,3 +127,43 @@ exports.getMonthly = async (req, res) => {
         sendFailureResponse(res, 400, err.message)
     }
 }
+
+exports.archiveTour = async(req, res) => {
+    try {
+        await Tour.findByIdAndUpdate(req.params.id, {
+            archive: true
+        })
+        sendSuccessResponse(res, 200, {
+            message: "tour archived"
+        })
+    } catch(error) {
+        sendFailureResponse(res, 500, error.message)
+    }
+}
+
+exports.unarchiveTour = async(req, res) => {
+    try {
+        await Tour.findByIdAndUpdate(req.params.id, {
+            archive: false
+        })
+        sendSuccessResponse(res, 200, {
+            message: "tour unarchived"
+        })
+    } catch(error) {
+        sendFailureResponse(res, 500, error.message)
+    }
+}
+exports.getArchives = async(req, res) => {
+    try {
+        const tour = await Tour.find({
+            archive: {
+                $eq: true
+            }
+        })
+        sendSuccessResponse(res, 200, {
+            tour
+        })
+    } catch(error) {
+        sendFailureResponse(res, 500, error.message)
+    }
+}

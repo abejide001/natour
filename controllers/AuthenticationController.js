@@ -61,3 +61,15 @@ exports.resetPasssword = (req, res) => {
         sendFailureResponse(res, 500, error.message)
     }
 }
+
+exports.updatePassword = async (req, res) => {
+   try {
+    const user = await User.findById(req.user.id)
+    const token = jwtSign(user)
+      sendSuccessResponse(res, 200, {
+          token
+      }) 
+   } catch (error) {
+       sendFailureResponse(res, 400, error.message)
+   }
+}

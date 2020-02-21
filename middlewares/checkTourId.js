@@ -1,6 +1,6 @@
 const Tour = require("../models/Tour")
 
-exports.checkId = async (req, res, next) => {
+exports.checkTourId = async (req, res, next) => {
     try {
             await Tour.findOne({
             _id: req.params.id

@@ -41,5 +41,10 @@ exports.features = async (req) => {
         const numberOfTours = await Tour.countDocuments()
         if (skip >= numberOfTours) throw new Error("The page does not exist")
     }
+    query = await Tour.find({
+        archive: {
+            $ne: true
+        }
+    })
     return query
 }

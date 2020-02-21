@@ -4,7 +4,6 @@ const { jwtSign } = require("../helpers/token")
 const User = require("../models/User")
 const { sendFailureResponse } = require("../utils/appResponse")
 const reset = async (req, res, next) => {
-    console.log(">>>>>>>")
     const hashedPassword = crypto.createHash("sha256").update(req.params.token).digest("hex")
     const user = await User.findOne({ passwordResetToken: hashedPassword, passwordResetExpires: { $gt: Date.now() }})
 
