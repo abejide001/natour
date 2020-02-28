@@ -1,15 +1,12 @@
 const Tour = require("../models/Tour")
+const { sendFailureResponse } = require("../utils/appResponse")
 
 exports.checkTourId = async (req, res, next) => {
     try {
-            await Tour.findOne({
-            _id: req.params.id
-       })
-    } catch(err) {
-        return res.status(400).json({
-            status: "fail",
-            message: "Invalid ID"
-        })
+        const tour = await Tour.findById(req.params.tourId)
+        if (!tour) return sendFailureResponse(res, 404, "Tour not found")
+    } catch(error) {
+        return sendFailureResponse(res, 500, error.message)
     }
    next()
 }

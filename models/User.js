@@ -21,7 +21,6 @@ const userSchema = new mongoose.Schema({
     },
     passwordConfirm: {
         type: String,
-        required: true,
         minlength: 8
     },
     newPassword: String,
@@ -39,7 +38,7 @@ const userSchema = new mongoose.Schema({
     active: {
         type: Boolean,
         default: true,
-        select: false
+        select: false // don't display this field
     }
 })
 
@@ -87,7 +86,7 @@ userSchema.methods.createPasswordResetToken = function () {
 
     this.passwordResetToken = crypto.createHash("sha256").update(resetToken).digest("hex") // reset token to user(encrypted, saving in db)
 
-    this.passwordResetExpires = Date.now() + 10 * 60 * 1000 // password expire time
+    this.passwordResetExpires = Date.now() + 10 * 60 * 1000 // password expire time(10 mins)
 
     return resetToken
 }

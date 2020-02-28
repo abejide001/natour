@@ -7,7 +7,7 @@ exports.getAlltours = async (req, res) => {
         let tours = await features(req)
         sendSuccessResponse(res, 200, tours)
     } catch (err) {
-        sendFailureResponse(res, 400, err.message)
+        sendFailureResponse(res, 500, err.message)
     }
 }
 
@@ -21,36 +21,36 @@ exports.createTour = async (req, res) => {
         })
         sendSuccessResponse(res, 201, newTour)
     } catch (err) {
-        sendFailureResponse(res, 400, err.message)
+        sendFailureResponse(res, 500, err.message)
     }
 }
 
 exports.getTour = async (req, res) => {
     try {
-        const tour = await Tour.findById(req.params.id)
+        const tour = await Tour.findById(req.params.tourId).populate("reviews")
         sendSuccessResponse(res, 200, tour)
     } catch (err) {
-        sendFailureResponse(res, 400, err.message)
+        sendFailureResponse(res, 500, err.message)
     }
 }
 
 exports.updateTour = async (req, res) => {
     try {
-        const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
+        const tour = await Tour.findByIdAndUpdate(req.params.tourId, req.body, {
             new: true
         })
         sendSuccessResponse(res, 200, tour)
     } catch (err) {
-        sendFailureResponse(res, 400, err.message)
+        sendFailureResponse(res, 500, err.message)
     }
 }
 
 exports.deleteTour = async (req, res) => {
     try {
-        await Tour.findByIdAndDelete(req.params.id)
+        await Tour.findByIdAndDelete(req.params.tourId)
         sendSuccessResponse(res, 204, "Deleted successfully")
     } catch (err) {
-        sendFailureResponse(res, 400, err.message)
+        sendFailureResponse(res, 500, err.message)
     }
 }
 
@@ -82,7 +82,7 @@ exports.getTourStats = async (req, res) => {
         ])
         sendSuccessResponse(res, 200, stats)
     } catch (err) {
-        sendFailureResponse(res, 400, err.message)
+        sendFailureResponse(res, 500, err.message)
     }
 }
 
@@ -113,7 +113,7 @@ exports.getMonthly = async (req, res) => {
                 $addFields: { month: "$_id" } // add the month field
             },
             {
-                $project: { _id: 0 } // remove the id field
+                $project: { _id: 0 } // remove the tourId field
             },
             {
                 $sort: { numTourStats: -1 } // sort in desc order
@@ -124,13 +124,13 @@ exports.getMonthly = async (req, res) => {
         ])
         sendSuccessResponse(res, 200, plan)
     } catch (error) {
-        sendFailureResponse(res, 400, err.message)
+        sendFailureResponse(res, 500, error.message)
     }
 }
 
 exports.archiveTour = async(req, res) => {
     try {
-        await Tour.findByIdAndUpdate(req.params.id, {
+        await Tour.findByIdAndUpdate(req.params.tourId, {
             archive: true
         })
         sendSuccessResponse(res, 200, {
@@ -143,7 +143,7 @@ exports.archiveTour = async(req, res) => {
 
 exports.unarchiveTour = async(req, res) => {
     try {
-        await Tour.findByIdAndUpdate(req.params.id, {
+        await Tour.findByIdAndUpdate(req.params.tourId, {
             archive: false
         })
         sendSuccessResponse(res, 200, {

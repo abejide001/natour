@@ -9,7 +9,7 @@ exports.signUp = async (req, res) => {
         const newUser = await User.create({
             name, email, password, passwordConfirm
         })
-        const userToken = jwtSign(newUser)
+        const userToken = jwtSign(newUser, res)
         return sendSuccessResponse(res, 201, {
             user: { name, email, userToken }
         })
@@ -22,7 +22,7 @@ exports.signIn = async (req, res) => {
     try {
         const { email } = req.body
         const user = await User.findOne({ email })
-        const token = jwtSign(user)
+        const token = jwtSign(user, res)
         sendSuccessResponse(res, 200, { token })
     } catch (error) {
         sendFailureResponse(res, 500, error.message)
@@ -65,7 +65,7 @@ exports.resetPasssword = (req, res) => {
 exports.updatePassword = async (req, res) => {
    try {
     const user = await User.findById(req.user.id)
-    const token = jwtSign(user)
+    const token = jwtSign(user, res)
       sendSuccessResponse(res, 200, {
           token
       }) 

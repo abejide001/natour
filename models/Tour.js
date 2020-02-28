@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 const slugify = require("slugify")
 
+const User = require("./User")
 const tourSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -30,7 +31,7 @@ const tourSchema = new mongoose.Schema({
         enum: {
             values: ["easy", "medium", "difficult"],
             message: "Dificulty is either: easy, medium, difficult"
-        } 
+        }
     },
     ratingsAverage: {
         type: Number,
@@ -56,8 +57,8 @@ const tourSchema = new mongoose.Schema({
         }
     },
     summary: {
-       type: String,
-       required: true
+        type: String,
+        required: true
     },
     description: {
         type: String,
@@ -85,30 +86,71 @@ const tourSchema = new mongoose.Schema({
     secretTour: {
         type: Boolean,
         default: false
-    }
+    },
+    startLocation: {
+        type: {
+            type: String,
+            default: 'Point',
+            enum: ['Point']
+        },
+        coordinates: [Number],
+        address: String,
+        description: String
+    },
+    locations: [
+        {
+            type: {
+                type: String,
+                default: 'Point',
+                enum: ['Point']
+            },
+            coordinates: [Number],
+            address: String,
+            description: String,
+            day: Number
+        }
+    ],
+    guides: [
+        {
+            type: mongoose.Schema.ObjectId,
+            ref: "User"
+        }
+    ]
 }, {
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
 })
 
-tourSchema.virtual("durationWeeks").get(function() { // get virtual property! 
+// virtual populate...
+tourSchema.virtual("reviews", {
+    ref: "Review",
+    foreignField: "tour",
+    localField: "_id"
+})
+
+tourSchema.virtual("durationWeeks").get(function () { // get virtual property! 
     return Math.ceil(this.duration / 7)
 })
 
 // query middleware
-tourSchema.pre(/^find/, function(next) { // find prehook
-    this.find({ secretTour: { $ne: true }})
+tourSchema.pre(/^find/, function (next) { // find prehook
+    this.find({ secretTour: { $ne: true } })
+    next()
+})
+
+tourSchema.pre(/^find/, function (next) { // find prehook
+    this.populate()
     next()
 })
 
 // Document middleware, runs before save and create middleware
-tourSchema.pre('save', function(next) {
+tourSchema.pre('save', function (next) {
     this.slug = slugify(this.name, { lower: true })
     next()
 })
 
 // aggregate middleware
-tourSchema.pre("aggregate", function(next) {
+tourSchema.pre("aggregate", function (next) {
     this.pipeline().unshift({
         $match: {
             secretTour: { $ne: true }

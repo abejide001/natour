@@ -18,14 +18,14 @@ tourRouter.get("/monthly-plan/:year", getMonthly)
 
 tourRouter.post("/", createTour)
 
-tourRouter.get("/:id", checkTourId, getTour)
+tourRouter.get("/:tourId", checkTourId, getTour)
 
-tourRouter.patch("/:id", protectRoute, restrictRoute, checkTourId, updateTour)
+tourRouter.patch("/:tourId", protectRoute, restrictRoute, checkTourId, updateTour)
 
-tourRouter.delete("/:id", protectRoute, restrictRoute, checkTourId, deleteTour)
+tourRouter.delete("/:tourId", checkTourId, deleteTour)
 
-tourRouter.delete("/archives/:id", checkTourId, archiveTour)
+tourRouter.delete("/archives/:tourId", checkTourId, archiveTour)
 
-tourRouter.delete("/unarchive/:id", checkTourId, unarchiveTour)
+tourRouter.delete("/unarchive/:tourId", checkTourId, unarchiveTour)
 
 module.exports = tourRouter
