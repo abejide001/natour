@@ -1,8 +1,21 @@
 const { sendFailureResponse } = require("../utils/appResponse")
 
-exports.restrictRoute = (...roles) => {
-    return (req, res, next) => {
-        if (!roles.includes(req.user.role)) return sendFailureResponse(res, 403, "You do not permission to access this route")
-        next()
-    }
+exports.adminRoute = (req, res, next) => {
+    if (req.user.role !== "admin") return sendFailureResponse(res, 403, "You do not permission to access this route")
+    next()
+}
+
+exports.leadGuideRoute = (req, res, next) => {
+    if (req.user.role !== "lead-guide") return sendFailureResponse(res, 403, "You do not permission to access this route")
+    next()
+}
+
+exports.guideRoute = (req, res, next) => {
+    if (req.user.role !== "guide") return sendFailureResponse(res, 403, "You do not permission to access this route")
+    next()
+}
+
+exports.userRoute = (req, res, next) => {
+    if (req.user.role !== "user") return sendFailureResponse(res, 403, "You do not permission to access this route")
+    next()
 }

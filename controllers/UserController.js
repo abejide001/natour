@@ -13,10 +13,7 @@ exports.getAllUsers = async(req, res) => {
     }
 }
 
-exports.getUser = (req, res) => {
-
-}
-
+// TODO: CREATE USER
 exports.createUser = (req, res) => {
 
 }
@@ -39,10 +36,16 @@ exports.deleteMe = async(req, res) => {
     sendSuccessResponse(res, 204, null)
 }
 
+// TODO: UPDATE USER
 exports.updateUser = (req, res) => {
 
 }
 
+// TODO: DELETE USER
 exports.deleteUser = (req, res) => {
 
+}
+
+exports.getMe = (req, res) => {
+    sendSuccessResponse(res, 200, req.user)
 }

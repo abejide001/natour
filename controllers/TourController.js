@@ -64,7 +64,7 @@ exports.getTourStats = async (req, res) => {
             },
             {
                 $group: {
-                    _id: "$difficulty",
+                    _id: "$difficulty", // group by difficulty
                     numRatings: { $sum: "$ratingsQuantity" },
                     numTours: { $sum: 1 },
                     avgRating: { $avg: "$ratingsAverage" },
@@ -166,4 +166,11 @@ exports.getArchives = async(req, res) => {
     } catch(error) {
         sendFailureResponse(res, 500, error.message)
     }
+}
+
+exports.getTourWithin = (req, res) => {
+    const { distance, latlng, unit } = req.params
+    const [lat, lng] = latlng.split(",")
+
+    if (!lat || !lng) sendFailureResponse(res, 400, "Please provide lat, lng")
 }

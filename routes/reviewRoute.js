@@ -1,12 +1,14 @@
 const express = require("express")
-const reviewRouter = express.Router()
+const reviewRouter = express.Router() // allow child to use parent params(id)
 
-const { getAllReviews, createReview, deleteReview } = require("../controllers/ReviewController")
+const { getAllReviews, deleteReview, updateReview } = require("../controllers/ReviewController")
 const { protectRoute } = require("../middlewares/protectRoute")
+const { userRoute, adminRoute } = require("../middlewares/restrictRoute")
+
 const { checkTourId } = require("../middlewares/checkTourId")
 
 reviewRouter.get("/", protectRoute, getAllReviews)
-reviewRouter.post("/tour/:tourId", protectRoute, checkTourId, createReview)
-reviewRouter.delete("/:reviewId", protectRoute, deleteReview)
+reviewRouter.delete("/:reviewId", protectRoute, [userRoute, adminRoute], checkTourId, deleteReview)
+reviewRouter.patch(":/reviewId", protectRoute, [userRoute, adminRoute], checkTourId, updateReview)
 
 module.exports = reviewRouter

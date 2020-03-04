@@ -16,7 +16,7 @@ exports.protectRoute = async (req, res, next) => {
         const { id, iat } = decoded
 
         // check if user still exist
-        const freshUser = await User.findById(id)
+        const freshUser = await User.findById(id).select(["-password", "-passwordResetExpires", "-passwordResetToken", "-passwordChangedAt"])
         if (!freshUser) return sendFailureResponse(res, 401, "User does not exist")
         if (freshUser.changedPasswordAfter(iat)) return sendFailureResponse(res, 401, "Password changed, log in again")
         req.user = freshUser // popluate req.user with logged in user info
