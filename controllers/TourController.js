@@ -128,7 +128,7 @@ exports.getMonthly = async (req, res) => {
     }
 }
 
-exports.archiveTour = async(req, res) => {
+exports.archiveTour = async (req, res) => {
     try {
         await Tour.findByIdAndUpdate(req.params.tourId, {
             archive: true
@@ -136,12 +136,12 @@ exports.archiveTour = async(req, res) => {
         sendSuccessResponse(res, 200, {
             message: "tour archived"
         })
-    } catch(error) {
+    } catch (error) {
         sendFailureResponse(res, 500, error.message)
     }
 }
 
-exports.unarchiveTour = async(req, res) => {
+exports.unarchiveTour = async (req, res) => {
     try {
         await Tour.findByIdAndUpdate(req.params.tourId, {
             archive: false
@@ -149,11 +149,11 @@ exports.unarchiveTour = async(req, res) => {
         sendSuccessResponse(res, 200, {
             message: "tour unarchived"
         })
-    } catch(error) {
+    } catch (error) {
         sendFailureResponse(res, 500, error.message)
     }
 }
-exports.getArchives = async(req, res) => {
+exports.getArchives = async (req, res) => {
     try {
         const tour = await Tour.find({
             archive: {
@@ -163,14 +163,51 @@ exports.getArchives = async(req, res) => {
         sendSuccessResponse(res, 200, {
             tour
         })
-    } catch(error) {
+    } catch (error) {
         sendFailureResponse(res, 500, error.message)
     }
 }
 
-exports.getTourWithin = (req, res) => {
+exports.getTourWithin = async (req, res) => {
     const { distance, latlng, unit } = req.params
     const [lat, lng] = latlng.split(",")
+    const radius = unit === "mi" ? distance / 3963.2 : distance / 6378.1
+    if (!lat || !lng) sendFailureResponse(res, 400, "Please provide lat, lng")
+    const tours = await Tour.find({
+        startLocation: {
+            $geoWithin: { $centerSphere: [[lng, lat], radius] }
+        }
+    })
+    sendSuccessResponse(res, 200, {
+        results: tours.length,
+        tours
+    })
+}
+
+exports.getDistances = async (req, res) => {
+    const { latlng, unit } = req.params
+    const [lat, lng] = latlng.split(",")
+    const multiplier = unit === "mi" ? 0.00062137 : 0.001
 
     if (!lat || !lng) sendFailureResponse(res, 400, "Please provide lat, lng")
+
+    const distances = await Tour.aggregate([
+        {
+            $geoNear: {  // always the first in geo aggregation
+                near: {
+                    type: "Point",
+                    coordinates: [lng * 1, lat * 1]
+                },
+                distanceField: "distance"
+            },
+            distanceField: "distance",
+            distanceMultiplier: multiplier // in km
+        }, {
+            $project: {
+                distance: 1,
+                name: 1
+            }
+        }
+    ])
+    sendSuccessResponse(res, 200, distances)
 }

@@ -5,7 +5,7 @@ const { checkTourId } = require("../middlewares/checkTourId")
 const { getTopTours } = require("../middlewares/aliasTopTours")
 const { protectRoute } = require("../middlewares/protectRoute")
 const { adminRoute, leadGuideRoute, guideRoute, userRoute } = require("../middlewares/restrictRoute")
-const { getAlltours, createTour, getTour, updateTour, deleteTour, getTourStats, getMonthly, archiveTour, getArchives, unarchiveTour, getTourWithin } = require("../controllers/TourController")
+const { getAlltours, createTour, getTour, updateTour, deleteTour, getTourStats, getMonthly, archiveTour, getArchives, unarchiveTour, getTourWithin, getDistances } = require("../controllers/TourController")
 
 tourRouter.get("/", getAlltours)
 
@@ -32,6 +32,8 @@ tourRouter.delete("/unarchive/:tourId", checkTourId, [adminRoute, leadGuideRoute
 tourRouter.post("/:tourId/reviews", protectRoute, userRoute, checkTourId,  createReview)
 
 tourRouter.get("/tours-within/:distance/center/:latlng/unit/:unit", getTourWithin)
+
+tourRouter.get("/distances/:latlng/unit/:unit", getDistances)
 
 // TODO
 // tourRouter.get("/:tourId/reviews", protectRoute, checkTourId, getReview)

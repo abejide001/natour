@@ -122,6 +122,7 @@ const tourSchema = new mongoose.Schema({
     toObject: { virtuals: true }
 })
 
+tourSchema.index({ startLocation: "2dsphere" })
 // virtual populate...
 tourSchema.virtual("reviews", {
     ref: "Review",
@@ -150,19 +151,21 @@ tourSchema.pre('save', function (next) {
     next()
 })
 
-tourSchema.post("findByIdAndDelete", function() {
-    console.log("i was deleted")
-})
+// post middleware
+// tourSchema.post(/^find/, function(doc, next) {
+//     console.log(doc)
+//     next()
+// })
 
 // aggregate middleware
-tourSchema.pre("aggregate", function (next) {
-    this.pipeline().unshift({
-        $match: {
-            secretTour: { $ne: true }
-        }
-    })
-    next()
-})
+// tourSchema.pre("aggregate", function (next) {
+//     this.pipeline().unshift({
+//         $match: {
+//             secretTour: { $ne: true }
+//         }
+//     })
+//     next()
+// })
 
 
 const Tour = mongoose.model('Tour', tourSchema)
