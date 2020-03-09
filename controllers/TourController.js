@@ -1,11 +1,19 @@
+const client = require("../services/cache")
 const Tour = require("../models/Tour")
 const { features } = require("../utils/features")
 const { sendFailureResponse, sendSuccessResponse } = require("../utils/appResponse")
 
 exports.getAlltours = async (req, res) => {
     try {
-        let tours = await features(req)
-        sendSuccessResponse(res, 200, tours)
+        const tourKey = "user:tours"
+        return client.get(tourKey, async (err, tours) => {
+            if (tours) return sendSuccessResponse(res, 200, JSON.parse(tours))
+            else {
+                let tours = await features(req)
+                client.setex(tourKey, 3600, JSON.stringify(tours))
+                sendSuccessResponse(res, 200, tours)
+            }
+        })
     } catch (err) {
         sendFailureResponse(res, 500, err.message)
     }
