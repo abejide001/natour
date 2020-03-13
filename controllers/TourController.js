@@ -21,12 +21,7 @@ exports.getAlltours = async (req, res) => {
 
 exports.createTour = async (req, res) => {
     try {
-        const { name, price, rating } = req.body
-        const newTour = await Tour.create({
-            name,
-            price,
-            rating
-        })
+        const newTour = await Tour.create(req.body)
         sendSuccessResponse(res, 201, newTour)
     } catch (err) {
         sendFailureResponse(res, 500, err.message)
@@ -35,7 +30,7 @@ exports.createTour = async (req, res) => {
 
 exports.getTour = async (req, res) => {
     try {
-        const tour = await Tour.findById(req.params.tourId).populate("reviews")
+        const tour = await Tour.findById(req.params.tourId).populate("reviews").populate("guides")
         sendSuccessResponse(res, 200, tour)
     } catch (err) {
         sendFailureResponse(res, 500, err.message)

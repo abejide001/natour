@@ -4,13 +4,21 @@ const rateLimit = require("express-rate-limit")
 const helmet = require("helmet")
 const mongoSanitize = require("express-mongo-sanitize")
 const xss = require("xss-clean")
+const path = require("path")
+const swaggerUi = require('swagger-ui-express')
+const swaggerDocument = require("./swagger.json")
 const hpp = require("hpp")
 const app = express()
+
+app.set("view engine", "pug")
+app.set("views", path.join(__dirname, "views"))
 
 const tourRouter = require("./routes/tourRoute")
 const authRouter = require("./routes/authRoute")
 const userRouter = require("./routes/userRoute")
 const reviewRouter = require("./routes/reviewRoute")
+const viewRouter = require("./routes/viewRoute")
+
 const { errorMiddleware } = require("./middlewares/errorMiddleware")
 
 const limiter = rateLimit({
@@ -49,10 +57,12 @@ app.use(hpp({
 
 app.use(morgan("dev"))
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/api/v1/tours", tourRouter)
 app.use("/api/v1/users", userRouter)
 app.use("/api/v1/auth", authRouter)
 app.use("/api/v1/reviews", reviewRouter)
+app.use("/", viewRouter)
 
 app.all("*", (req, res, next) => {
     const err = new Error(`Can't find ${req.originalUrl}`)
