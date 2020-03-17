@@ -3,29 +3,30 @@ const { sendSuccessResponse, sendFailureResponse } = require("../utils/appRespon
 
 exports.getAllReviews = async (req, res) => {
     try {
-        const reviews = await Review.find().populate("user", ["name", "email"])
+        const reviews = await Review.find().populate("user", ["name", "email", "photo"])
         sendSuccessResponse(res, 200, reviews)
     } catch (error) {
         sendFailureResponse(res, 500, error.message)
     }
 }
 
-// TODO: get reviews for a single tour
-// exports.getReview = async (req, res) => {
-//     try {
-//         const tourId = req.params.tourId
-//         console.log(typeof tourId)
-//         const review = await Review.findOne({ tour: "232435454"})
-//         console.log(review)
-//         sendSuccessResponse(res, 200, review) 
-//     } catch (error) {
-//         sendFailureResponse(res, 500, error.message)
-//     }
-// }
+
+exports.getReview = async (req, res) => {
+    try {
+        const { tourId } = req.params
+        let filter = {}
+        if (tourId) filter = { tour: tourId }
+        const review = await Review.find(filter).populate("user", ["name", "email", "photo"])
+        sendSuccessResponse(res, 200, review) 
+    } catch (error) {
+        sendFailureResponse(res, 500, error.message)
+    }
+}
 
 exports.createReview = async (req, res) => {
     try {
         const { rating, review } = req.body
+        console.log(req.params.tourId)
         const reviews = await Review.create({
             review,
             user: req.user.id,

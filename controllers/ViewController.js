@@ -9,6 +9,16 @@ exports.getOverview = async (req, res) => {
     })
 }
 
-exports.getTour = (req, res) => {
-    res.render("Get tour")
+exports.getTour = async (req, res) => {
+    const { slug } = req.params
+    const tour = await Tour.findOne({ slug }).populate({
+        path: "reviews",
+        populate: {
+            path: "user",
+            select: "email -_id name photo"
+        }
+    }).populate("guides")
+    res.render("tour", {
+        tour
+    })
 }
