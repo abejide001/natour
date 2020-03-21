@@ -5,9 +5,9 @@ const sendMail = require("../utils/mailer")
 
 exports.signUp = async (req, res) => {
     try {
-        const { name, email, password, passwordConfirm } = req.body
+        const { name, email, password, passwordConfirm, role } = req.body
         const newUser = await User.create({
-            name, email, password, passwordConfirm
+            name, email, password, passwordConfirm, role
         })
         const userToken = jwtSign(newUser, res)
         return sendSuccessResponse(res, 201, {

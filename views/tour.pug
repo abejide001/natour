@@ -1,5 +1,10 @@
 extends base
 
+block append head
+  script(src='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js')
+  link(href='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet')
+
+
 mixin reviewCard(review)
   .reviews__card
         .reviews__avatar
@@ -69,7 +74,7 @@ block content
         img.picture-box__img.picture-box__img--1(src=`/img/tours/${image}`, alt=`tour`)
 
   section.section-map
-    #map
+    #map(data-locations=`${JSON.stringify(tour.locations)}`)
 
   section.section-reviews
     .reviews
