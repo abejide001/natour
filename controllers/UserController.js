@@ -20,10 +20,12 @@ exports.createUser = (req, res) => {
 
 exports.updateMe = async(req, res) => {
     const filteredBody = filterBody(req.body, "name", "email")
+    console.log(req.user.id)
     const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, { // x because we don't want the user to change other fields apart from email and name
         new: true,
         runValidators: true
     })
+    console.log("thissss")
     sendSuccessResponse(res, 200, {
         user: updatedUser
     })
@@ -37,9 +39,9 @@ exports.deleteMe = async(req, res) => {
 }
 
 // TODO: UPDATE USER
-exports.updateUser = (req, res) => {
+// exports.updateUser = (req, res) => {
 
-}
+// }
 
 // TODO: DELETE USER
 exports.deleteUser = (req, res) => {

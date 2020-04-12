@@ -14,7 +14,7 @@ exports.signUp = async (req, res) => {
             user: { name, email, userToken }
         })
     } catch (error) {
-        sendFailureResponse(res, 400, error.message)
+        sendFailureResponse(res, 500, error.message)
     }
 }
 
@@ -70,6 +70,14 @@ exports.updatePassword = async (req, res) => {
           token
       }) 
    } catch (error) {
-       sendFailureResponse(res, 400, error.message)
+       sendFailureResponse(res, 500, error.message)
    }
+}
+
+exports.logout = (req, res) => {
+    res.cookie("jwt", "loggedout", {
+        expires: new Date(Date.now() + 10 * 1000),
+        httpOnly: true
+    })
+    sendSuccessResponse(res, 200, "logged out")
 }

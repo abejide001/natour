@@ -8,6 +8,7 @@ const path = require("path")
 const swaggerUi = require('swagger-ui-express')
 const swaggerDocument = require("./swagger.json")
 const hpp = require("hpp")
+const cookieParser = require("cookie-parser")
 const app = express()
 
 app.set("view engine", "pug")
@@ -43,6 +44,7 @@ app.use(mongoSanitize())
 app.use(xss())
 
 app.use(express.json( { limit: '10kb' }))
+app.use(cookieParser())
 
 app.use(hpp({
     whitelist: [

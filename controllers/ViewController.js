@@ -18,6 +18,11 @@ exports.getTour = async (req, res) => {
             select: "email -_id name photo"
         }
     }).populate("guides")
+    if (!tour) {
+        return res.render("error", {
+            msg: "no tour with that name"
+        })
+    }
     res.render("tour", {
         tour
     })
@@ -25,4 +30,10 @@ exports.getTour = async (req, res) => {
 
 exports.getLoginForm =  (req, res) => {
     res.status(200).render("login")
+}
+
+exports.getAccount = (req, res) => {
+    res.status(200).render("account", {
+        title: "Your Account"
+    })
 }

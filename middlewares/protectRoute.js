@@ -8,7 +8,12 @@ dotenv.config()
 
 exports.protectRoute = async (req, res, next) => {
     try {
-        const token = req.headers["x-access-token"] || req.headers.authorization || req.body.token || req.query.slt
+        let token
+        if (req.headers.authorization && req.headers.authorization.startsnWith("Bearer")) {
+            token = req.headers.authorization.split(" ")[1]
+        } else if (req.cookies.jwt) {
+            token = req.cookies.jwt
+        }
         if (!token) return sendFailureResponse(res, 401, "Provide a token abeg")
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
@@ -20,6 +25,7 @@ exports.protectRoute = async (req, res, next) => {
         if (!freshUser) return sendFailureResponse(res, 401, "User does not exist")
         if (freshUser.changedPasswordAfter(iat)) return sendFailureResponse(res, 401, "Password changed, log in again")
         req.user = freshUser // popluate req.user with logged in user info
+        res.locals.user = freshUser
     } catch (error) {
         return sendFailureResponse(res, 400, error.message)
     }
