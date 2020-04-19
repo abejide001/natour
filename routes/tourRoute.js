@@ -7,6 +7,8 @@ const { protectRoute } = require("../middlewares/protectRoute")
 const { adminRoute, leadGuideRoute, guideRoute, userRoute } = require("../middlewares/restrictRoute")
 const checkDuplicateReview = require("../middlewares/checkDuplicateReview")
 const { getAlltours, createTour, getTour, updateTour, deleteTour, getTourStats, getMonthly, archiveTour, getArchives, unarchiveTour, getTourWithin, getDistances } = require("../controllers/TourController")
+const tourImageUpload = require("../middlewares/tourImageUpload")
+const resizeTourPhoto = require("../middlewares/resizeTourPhoto")
 
 tourRouter.get("/", getAlltours)
 
@@ -22,7 +24,7 @@ tourRouter.post("/", protectRoute, (adminRoute || leadGuideRoute), createTour)
 
 tourRouter.get("/:tourId", checkTourId, getTour)
 
-tourRouter.patch("/:tourId", protectRoute, adminRoute, checkTourId, updateTour)
+tourRouter.patch("/:tourId", protectRoute, adminRoute, checkTourId, tourImageUpload, resizeTourPhoto, updateTour)
 
 tourRouter.delete("/:tourId", checkTourId, adminRoute, deleteTour)
 

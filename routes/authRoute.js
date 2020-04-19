@@ -16,6 +16,6 @@ authRouter.post("/forget-password", checkEmailForForgotPassword, forgotPassword)
 
 authRouter.post("/reset/:token", passwordMatch, reset, resetPasssword)
 
-authRouter.patch("/update-password", protectRoute, confirmPasswordForUpdate, updatePassword)
+authRouter.patch("/update-password", protectRoute, confirmPasswordForUpdate, passwordMatch, updatePassword)
 
 module.exports = authRouter

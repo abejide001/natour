@@ -30,10 +30,11 @@ if (logOutBtn) {
 if (userDataForm) {
     userDataForm.addEventListener("submit", (e) => {
         e.preventDefault()
-        const email = document.getElementById("email").value
-        const name = document.getElementById("name").value
-        console.log(email, name)
-        updateSettings({ name, email }, "data")
+        const form = new FormData()
+        form.append("name", document.getElementById("email").value)
+        form.append("email", document.getElementById("name").value)
+        form.append("photo", document.getElementById("photo").files[0])
+        updateSettings(form, "data")
     })
 }
 
@@ -42,10 +43,10 @@ if (userPasswordForm) {
         e.preventDefault()
         document.querySelector(".btn--save-password").textContent = "Updating..."
 
-        const passwordCurrent = document.getElementById("password-current").value
-        const password = document.getElementById("password").value
+        const password = document.getElementById("password-current").value
+        const newPassword = document.getElementById("password").value
         const passwordConfirm = document.getElementById("password-confirm").value
-        await updateSettings({ passwordCurrent, password, passwordConfirm }, "password")
+        await updateSettings({ password, newPassword, passwordConfirm }, "password")
 
         document.querySelector(".btn--save-password").textContent = "Save Password"
         document.getElementById("password-current").value = ""

@@ -13,19 +13,13 @@ exports.getAllUsers = async(req, res) => {
     }
 }
 
-// TODO: CREATE USER
-exports.createUser = (req, res) => {
-
-}
-
 exports.updateMe = async(req, res) => {
     const filteredBody = filterBody(req.body, "name", "email")
-    console.log(req.user.id)
+    if (req.file) filteredBody.photo = req.file.filename
     const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, { // x because we don't want the user to change other fields apart from email and name
         new: true,
         runValidators: true
     })
-    console.log("thissss")
     sendSuccessResponse(res, 200, {
         user: updatedUser
     })
@@ -36,16 +30,6 @@ exports.deleteMe = async(req, res) => {
         active: false
     })
     sendSuccessResponse(res, 204, null)
-}
-
-// TODO: UPDATE USER
-// exports.updateUser = (req, res) => {
-
-// }
-
-// TODO: DELETE USER
-exports.deleteUser = (req, res) => {
-
 }
 
 exports.getMe = (req, res) => {

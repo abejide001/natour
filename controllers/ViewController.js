@@ -29,6 +29,7 @@ exports.getTour = async (req, res) => {
 }
 
 exports.getLoginForm =  (req, res) => {
+    console.log(req.cookies, "reqqqq")
     res.status(200).render("login")
 }
 

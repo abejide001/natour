@@ -8502,7 +8502,7 @@ var updateSettings = /*#__PURE__*/function () {
         switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
-            url = type === "password" ? "http://localhost:3000/api/v1/users/update-password" : "http://localhost:3000/api/v1/users/update-me";
+            url = type === "password" ? "http://localhost:3000/api/v1/auth/update-password" : "http://localhost:3000/api/v1/users/update-me";
             _context.next = 4;
             return (0, _axios.default)({
               method: "PATCH",
@@ -8878,33 +8878,31 @@ if (logOutBtn) {
 if (userDataForm) {
   userDataForm.addEventListener("submit", function (e) {
     e.preventDefault();
-    var email = document.getElementById("email").value;
-    var name = document.getElementById("name").value;
-    console.log(email, name);
-    (0, _updateSettings.updateSettings)({
-      name: name,
-      email: email
-    }, "data");
+    var form = new FormData();
+    form.append("name", document.getElementById("email").value);
+    form.append("email", document.getElementById("name").value);
+    form.append("photo", document.getElementById("photo").files[0]);
+    (0, _updateSettings.updateSettings)(form, "data");
   });
 }
 
 if (userPasswordForm) {
   userPasswordForm.addEventListener("submit", /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(e) {
-      var passwordCurrent, password, passwordConfirm;
+      var password, newPassword, passwordConfirm;
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               e.preventDefault();
               document.querySelector(".btn--save-password").textContent = "Updating...";
-              passwordCurrent = document.getElementById("password-current").value;
-              password = document.getElementById("password").value;
+              password = document.getElementById("password-current").value;
+              newPassword = document.getElementById("password").value;
               passwordConfirm = document.getElementById("password-confirm").value;
               _context.next = 7;
               return (0, _updateSettings.updateSettings)({
-                passwordCurrent: passwordCurrent,
                 password: password,
+                newPassword: newPassword,
                 passwordConfirm: passwordConfirm
               }, "password");
 
@@ -8955,7 +8953,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49928" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49894" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
