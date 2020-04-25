@@ -1,7 +1,7 @@
 const User = require("../models/User")
 const { sendFailureResponse, sendSuccessResponse } = require("../utils/appResponse")
 const { jwtSign } = require("../helpers/token")
-const sendMail = require("../utils/mailer")
+const Email = require("../utils/mailer")
 
 exports.signUp = async (req, res) => {
     try {
@@ -9,6 +9,8 @@ exports.signUp = async (req, res) => {
         const newUser = await User.create({
             name, email, password, passwordConfirm, role
         })
+        const url = `${req.protocol}://${req.get("host")}/me`
+        await new Email(newUser, url).sendWelcome()
         const userToken = jwtSign(newUser, res)
         return sendSuccessResponse(res, 201, {
             user: { name, email, userToken }
@@ -34,15 +36,9 @@ exports.forgotPassword = async (req, res) => {
     const user = await User.findOne({ email })
     const resetToken = user.createPasswordResetToken()
     await user.save({ validateBeforeSave: false })
-
     const resetURL = `${req.protocol}://${req.get("host")}/api/v1/auth/reset/${resetToken}`
-    const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to ${resetURL}.`
     try {
-        await sendMail({
-            email: user.email,
-            subject: "Your password reset link(valid for 10 min)",
-            message
-        })
+        await new Email(user, resetURL).sendPasswordReset()
         sendSuccessResponse(res, 200, {
             message: "I don send password reset link to your mail 😶"
         })

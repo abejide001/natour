@@ -26,7 +26,6 @@ exports.getReview = async (req, res) => {
 exports.createReview = async (req, res) => {
     try {
         const { rating, review } = req.body
-        console.log(req.params.tourId)
         const reviews = await Review.create({
             review,
             user: req.user.id,

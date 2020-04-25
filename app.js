@@ -19,6 +19,7 @@ const authRouter = require("./routes/authRoute")
 const userRouter = require("./routes/userRoute")
 const reviewRouter = require("./routes/reviewRoute")
 const viewRouter = require("./routes/viewRoute")
+const bookingRouter = require("./routes/bookingRoute")
 
 const { errorMiddleware } = require("./middlewares/errorMiddleware")
 
@@ -64,6 +65,7 @@ app.use("/api/v1/tours", tourRouter)
 app.use("/api/v1/users", userRouter)
 app.use("/api/v1/auth", authRouter)
 app.use("/api/v1/reviews", reviewRouter)
+app.use("/api/v1/bookings", bookingRouter)
 app.use("/", viewRouter)
 
 app.all("*", (req, res, next) => {

@@ -1,4 +1,5 @@
 const Tour = require("../models/Tour")
+const Booking = require("../models/Booking")
 
 exports.getOverview = async (req, res) => {
     const tours = await Tour.find()
@@ -29,12 +30,27 @@ exports.getTour = async (req, res) => {
 }
 
 exports.getLoginForm =  (req, res) => {
-    console.log(req.cookies, "reqqqq")
     res.status(200).render("login")
 }
 
 exports.getAccount = (req, res) => {
     res.status(200).render("account", {
         title: "Your Account"
+    })
+}
+
+exports.getMyTours = async (req, res) => {
+    const bookings = await Booking.find({
+        user: req.user._id,
+    })
+    const tourIds = bookings.map(el => el.tour)
+    const tours = await Tour.find({
+        _id: {
+            $in: tourIds
+        }
+    })
+    res.status(200).render("overview", {
+        title: "My Tours",
+        tours
     })
 }
