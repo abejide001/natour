@@ -10,12 +10,12 @@ module.exports = class Email {
         this.to = user.email
         this.firstName = user.name.split(" ")[0];
         this.url = url
-        this.from = "Papa <kaka@gmail.com>"
+        this.from = "<abejidefemi1@gmail.com>"
     }
 
     newTransport() {
         const { EMAIL_HOST, EMAIL_PORT, EMAIL_USERNAME, EMAIL_PASSWORD, SENDGRID_USERNAME, SENDGRID_PASSWORD } = process.env
-        if (process.env.NODE_ENV === "production") {
+        if (process.env.NODE_ENV !== "development") {
             return nodemailer.createTransport({
                 service: "SendGrid",
                 auth: {

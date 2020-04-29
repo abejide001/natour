@@ -9,6 +9,7 @@ const swaggerUi = require('swagger-ui-express')
 const swaggerDocument = require("./swagger.json")
 const hpp = require("hpp")
 const cookieParser = require("cookie-parser")
+const compression = require("compression")
 const app = express()
 
 app.set("view engine", "pug")
@@ -31,6 +32,9 @@ const limiter = rateLimit({
 
 // set security HTTP headers
 app.use(helmet())
+
+// compress response
+app.use(compression())
 
 // rate limiter
 app.use("/api", limiter)
