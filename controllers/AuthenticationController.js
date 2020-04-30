@@ -11,7 +11,7 @@ exports.signUp = async (req, res) => {
         })
         const url = `${req.protocol}://${req.get("host")}/me`
         await new Email(newUser, url).sendWelcome()
-        const userToken = jwtSign(newUser, res)
+        const userToken = jwtSign(newUser, req, res)
         return sendSuccessResponse(res, 201, {
             user: { name, email, userToken }
         })
@@ -24,7 +24,7 @@ exports.signIn = async (req, res) => {
     try {
         const { email } = req.body
         const user = await User.findOne({ email })
-        const token = jwtSign(user, res)
+        const token = jwtSign(user, req, res)
         sendSuccessResponse(res, 200, { token })
     } catch (error) {
         sendFailureResponse(res, 500, error.message)

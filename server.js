@@ -2,13 +2,22 @@ const app = require("./app")
 
 require("./db/connection")()
 
-const port = 3000
+const port = process.env.PORT || 3000
+
+const server = app.listen(port, () => {
+    console.log(`app listening on ${port}`)
+})
 
 process.on("unhandledRejection", err => {
     console.log(err.name, err.message)
-    process.exit(1) // shut down the app
+    server.close(() => {
+        process.exit(1) // shut down the app
+    })
 })
 
-app.listen(port, () => {
-    console.log(`app listening on ${port}`)
+process.on("SIGTERM", () => {
+    console.log("SIGTERM received, Shutting down gracefully")
+    server.close(() => {
+        console.log("Process terminated")
+    })
 })

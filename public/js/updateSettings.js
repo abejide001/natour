@@ -9,6 +9,7 @@ export const updateSettings = async (data, type) => {
             url,
             data
         })
+        console.log(res, "response")
         if (res.data.status === "success") {
             showAlert("success", `${type} updated succesfully`)
         }

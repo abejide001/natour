@@ -1,9 +1,11 @@
-const redis = require('redis')
+// const redis = require('redis')
 
-const client = redis.createClient(6379)
+// const port = 6379 || process.env.PORT
 
-client.on("error", err => {
-    console.log(err)
-})
+// const client = redis.createClient(port)
 
-module.exports = client
+// client.on("error", err => {
+//     console.log(err)
+// })
+
+// module.exports = client

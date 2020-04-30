@@ -8,33 +8,36 @@ const path = require("path")
 const swaggerUi = require('swagger-ui-express')
 const swaggerDocument = require("./swagger.json")
 const hpp = require("hpp")
+const cors = require("cors")
 const cookieParser = require("cookie-parser")
 const compression = require("compression")
-const app = express()
-
-app.set("view engine", "pug")
-app.set("views", path.join(__dirname, "views"))
-
 const tourRouter = require("./routes/tourRoute")
 const authRouter = require("./routes/authRoute")
 const userRouter = require("./routes/userRoute")
 const reviewRouter = require("./routes/reviewRoute")
 const viewRouter = require("./routes/viewRoute")
 const bookingRouter = require("./routes/bookingRoute")
-
 const { errorMiddleware } = require("./middlewares/errorMiddleware")
 
-const limiter = rateLimit({
-    max: 100,
-    windowMs: 60 * 60 * 1000,
-    message: "Too many request"
-})
+const app = express()
+
+app.use(cors())
+app.options("*", cors())
+app.enable("trust-proxy")
+app.set("view engine", "pug")
+app.set("views", path.join(__dirname, "views"))
 
 // set security HTTP headers
 app.use(helmet())
 
 // compress response
 app.use(compression())
+
+const limiter = rateLimit({
+    max: 100,
+    windowMs: 60 * 60 * 1000,
+    message: "Too many request"
+})
 
 // rate limiter
 app.use("/api", limiter)
@@ -79,4 +82,5 @@ app.all("*", (req, res, next) => {
     err.statusCode = 404
     next(err)
 }, errorMiddleware)
+
 module.exports = app

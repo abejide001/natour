@@ -5,11 +5,11 @@ const { protectRoute } = require("../middlewares/protectRoute")
 const { createBookingCheckout } = require("../controllers/BookingController")
 const isLoggedIn = require("../middlewares/isLoggedIn")
 const redirectToLogin = require("../middlewares/redirectToLogin")
-const redirectToHome = require("../middlewares/redirectToHome")
+// const redirectToHome = require("../middlewares/redirectToHome")
 
 viewRouter.get("/", createBookingCheckout, isLoggedIn, getOverview)
 viewRouter.get("/tour/:slug", isLoggedIn, getTour)
-viewRouter.get("/login", isLoggedIn,  redirectToHome, getLoginForm)
+viewRouter.get("/login", isLoggedIn, getLoginForm)
 viewRouter.get("/me", redirectToLogin, protectRoute, getAccount)
 viewRouter.get("/my-tours", redirectToLogin, protectRoute, getMyTours)
 
