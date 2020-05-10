@@ -9,6 +9,7 @@ const swaggerUi = require('swagger-ui-express')
 const swaggerDocument = require("./swagger.json")
 const hpp = require("hpp")
 const cors = require("cors")
+const bodyParser = require("body-parser")
 const cookieParser = require("cookie-parser")
 const compression = require("compression")
 const tourRouter = require("./routes/tourRoute")
@@ -17,6 +18,7 @@ const userRouter = require("./routes/userRoute")
 const reviewRouter = require("./routes/reviewRoute")
 const viewRouter = require("./routes/viewRoute")
 const bookingRouter = require("./routes/bookingRoute")
+const bookingController = require("./controllers/BookingController")
 const { errorMiddleware } = require("./middlewares/errorMiddleware")
 
 const app = express()
@@ -42,6 +44,7 @@ const limiter = rateLimit({
 // rate limiter
 app.use("/api", limiter)
 
+app.use("/webhook-checkout", bodyParser.raw({ type: "*/*" }), bookingController.webhookCheckout) // the request is not coming back as JSON
 // serve static files
 app.use(express.static(`${__dirname}/public`))
 
