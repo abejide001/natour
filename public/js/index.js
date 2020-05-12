@@ -3,20 +3,33 @@ import { login, logout } from "./login"
 import { updateSettings } from "./updateSettings"
 import { displayMap } from "./mapbox"
 import { bookTour } from "./stripe"
+import { signUp } from "./signup"
 
-const loginForm = document.querySelector(".form")
+const signupForm = document.querySelector(".sign-up-form")
+const loginForm = document.querySelector(".login-form")
 const mapBox = JSON.parse(JSON.stringify(document.getElementById("map")))
 const logOutBtn = document.querySelector(".nav__el--logout")
 const userDataForm = document.querySelector(".form-user-data")
 const userPasswordForm = document.querySelector(".form-user-settings")
 const bookBtn = document.getElementById("book-tour")
 
+if (signupForm) {
+    signupForm.addEventListener("submit", e => {
+        e.preventDefault()
+        const name = document.getElementById("name").value
+        const email = document.getElementById("email").value
+        const password = document.getElementById("password").value
+        const passwordConfirm = document.getElementById("passwordConfirm").value
+        return signUp(name, email, password, passwordConfirm)
+    })
+}
+
 if (loginForm) {
     loginForm.addEventListener("submit", e => {
         e.preventDefault()
         const email = document.getElementById("email").value
         const password = document.getElementById("password").value
-        login(email, password)
+        return login(email, password)
     })
 }
 
@@ -26,7 +39,7 @@ if (mapBox) {
 }
 
 if (logOutBtn) {
-    logOutBtn.addEventListener("click", logout)
+    return logOutBtn.addEventListener("click", logout)
 }
 
 if (userDataForm) {
@@ -37,7 +50,7 @@ if (userDataForm) {
         form.append("email", document.getElementById("email").value)
         form.append("photo", document.getElementById("photo").files[0])
         console.log(form, "form")
-        updateSettings(form, "data")
+        return updateSettings(form, "data")
     })
 }
 
