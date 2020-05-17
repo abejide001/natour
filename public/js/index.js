@@ -1,9 +1,9 @@
 import "@babel/polyfill"
-import { login, logout } from "./login"
 import { updateSettings } from "./updateSettings"
 import { displayMap } from "./mapbox"
 import { bookTour } from "./stripe"
 import { signUp } from "./signup"
+import { login, logout } from "./login"
 
 const signupForm = document.querySelector(".sign-up-form")
 const loginForm = document.querySelector(".login-form")
@@ -39,7 +39,7 @@ if (mapBox) {
 }
 
 if (logOutBtn) {
-    return logOutBtn.addEventListener("click", logout)
+    logOutBtn.addEventListener("click", logout)
 }
 
 if (userDataForm) {
@@ -49,8 +49,7 @@ if (userDataForm) {
         form.append("name", document.getElementById("name").value)
         form.append("email", document.getElementById("email").value)
         form.append("photo", document.getElementById("photo").files[0])
-        console.log(form, "form")
-        return updateSettings(form, "data")
+         updateSettings(form, "data")
     })
 }
 
