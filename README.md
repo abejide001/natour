@@ -30,3 +30,29 @@ $ cd natour
 $ npm i
 $ npm run seed
 $ npm run start:dev
+
+## API Usage
+
+API BASE URL http://booktours.herokuapp.com/api/v1. It's recommended to attach a `authorization` Header containing the generated `token` from `/api/auth/signin` to all access all requests.
+
+### Tours endpoints `/api/v1/tours`
+
+| method | route                                              | description                              |
+| ------ | -------------------------------------------------- | -----------------------------------------|
+| GET    | /                                                  | Get all tours                            |
+| GET    | /:tourId                                           | Get a tour                               |
+| POST   | /                                                  | Create a tour                            |
+| PATCH  | /:tourId                                           | Update a tour                            |
+| DELETE | /:tourId                                           | Delete a tour                            |  
+| GET    | /top                                               | Get top tours                            |
+| GET    | /tour-stats                                        | Get tour stats                           |
+| GET    | /monthly-plan/:year                                | Get monthly tours                        |
+| GET    | /archives                                          | Get archives                             |
+| DELETE | /unarchive/:tourId                                 | Unarchive a tour                         |
+| DELETE | /archives/:tourId                                  | archive a tour                           |
+| GET    | /:tourId/reviews                                   | Get all reviews belonging to a tour      |
+| GET    | /tours-within/:distance/center/:latlng/unit/:unit  | Get tours within                         |
+| GET    | /distances/:latlng/unit/:unit                      | Get distances                            |
+| POST   | /:tourId/reviews                                   | Create review for tour                   |
+
+

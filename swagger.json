@@ -25,7 +25,7 @@
     "tags": [
       {
         "name": "Landing",
-        "description": "Barefoot Nomad landing"
+        "description": "Natours landing"
       },
       {
         "name": "User",
@@ -335,6 +335,60 @@
         "get": {
           "tags": ["Tours"],
           "summary": "Get all tours",
+          "description": "",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "produces": ["application/json"],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "uuid": {
+                    "type": "string",
+                    "example": "95ccd25d-2524-4b95-a441-8e2643c4c075"
+                  },
+                  "address": {
+                    "type": "string",
+                    "example": "9 shagamnu"
+                  },
+                  "state": {
+                    "type": "string",
+                    "example": "Vinci"
+                  },
+                  "city": {
+                    "type": "string",
+                    "example": "bangkok"
+                  },
+                  "country": {
+                    "type": "string",
+                    "example": "spain"
+                  },
+                  "created_at": {
+                    "type": "date",
+                    "example": ""
+                  },
+                  "updated_at": {
+                    "type": "date",
+                    "example": ""
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          }
+        }
+      },
+      "/api/v1/tours/tourID": {
+        "get": {
+          "tags": ["Tours"],
+          "summary": "Get a tour",
           "description": "",
           "security": [
             {
