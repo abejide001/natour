@@ -54,5 +54,3 @@ API BASE URL http://booktours.herokuapp.com/api/v1. It's recommended to attach a
 | GET    | /tours-within/:distance/center/:latlng/unit/:unit  | Get tours within                         |
 | GET    | /distances/:latlng/unit/:unit                      | Get distances                            |
 | POST   | /:tourId/reviews                                   | Create review for tour                   |
-
-
