@@ -9,7 +9,7 @@ let client
 if (process.env.NODE_ENV === "production") {
     client = redis.createClient({
         port,
-        host: "prodprod.redis.cache.windows.net",
+        host: "natours.redis.cache.windows.net",
         password: process.env.REDIS_PASSWORD
     })
     client.on("error", err => {
