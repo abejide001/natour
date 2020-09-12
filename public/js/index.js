@@ -20,7 +20,8 @@ if (signupForm) {
         const email = document.getElementById("email").value
         const password = document.getElementById("password").value
         const passwordConfirm = document.getElementById("passwordConfirm").value
-        return signUp(name, email, password, passwordConfirm)
+        signUp(name, email, password, passwordConfirm)
+        return
     })
 }
 

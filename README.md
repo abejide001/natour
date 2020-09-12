@@ -62,3 +62,5 @@ API BASE URL http://booktours.herokuapp.com/api/v1. It's recommended to attach a
 | GET    | /me                                                | Get a single user                        |
 | PATCH  | /updateme                                          | Update a user                            |
 | DELETE | /delete-me                                         | Delete a user                            |
+
+### Authorization endpoints

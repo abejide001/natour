@@ -18,6 +18,7 @@ export const signUp = async (name, email, password, passwordConfirm) => {
             window.setTimeout(() => {
                 location.assign("/")
             }, 1500)
+            return
         }
     } catch (error) {
         showAlert("error", error.response.data.message)
