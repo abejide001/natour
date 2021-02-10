@@ -8,16 +8,8 @@ const {
 
 exports.getAlltours = async (req, res) => {
   try {
-    const tourKey = "user:tours";
-    return client.get(tourKey, async (err, tours) => {
-      if (tours) {
-        sendSuccessResponse(res, 200, JSON.parse(tours));
-      } else {
-        tours = await features(req);
-        client.setex(tourKey, 3600, JSON.stringify(tours));
-        sendSuccessResponse(res, 200, tours);
-      }
-    });
+    let tours = await features(req);
+    sendSuccessResponse(res, 200, tours);
   } catch (err) {
     sendFailureResponse(res, 500, err.message);
   }
