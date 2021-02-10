@@ -3,7 +3,6 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 const { DB_PASSWORD } = process.env;
-
 const connectDB = () => {
   if (process.env.NODE_ENV === "development") {
     return mongoose

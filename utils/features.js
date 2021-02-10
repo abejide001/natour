@@ -42,9 +42,7 @@ exports.features = async (req) => {
     if (skip >= numberOfTours) throw new Error("The page does not exist");
   }
   query = await Tour.find({
-    archive: {
-      $ne: true,
-    },
+    archive: !true,
   });
   return query;
 };
